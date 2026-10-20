@@ -1,0 +1,28 @@
+name: CI Failure Drill
+
+# Manual trigger only: this workflow deliberately fails and must NOT run on every push.
+on:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint (passes)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Run lint
+        run: |
+          echo "Running repository lint checks..."
+          # Minimal stand-in lint: verify that a README exists.
+          test -f README.md
+          echo "Lint passed."
+
+  deliberately-fail:
+    name: Deliberate failure (exits 1)
+    runs-on: ubuntu-latest
+    steps:
+      - name: This step always exits 1 on purpose
+        run: |
+          echo "DRILL-CONTROLLED-FAILURE: this step exits 1 by design."
+          exit 1
